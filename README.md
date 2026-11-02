@@ -1,5 +1,7 @@
 # circuit-fleet
 
+[![Conn3x grade](https://conn3x.org/circuits/fleet/grade.svg)](https://conn3x.org/circuits/fleet/grade)
+
 A Conn3x circuit that installs the Fleet device management server from its pinned, checksum-verified release and runs it under systemd. Fleet is built on osquery: your hosts enroll with it, and you can ask any of them a question in SQL and get the answer back while you wait.
 
 Fleet needs MySQL and Redis or Valkey, and this circuit expects both to exist. [circuit-mysql](https://github.com/conn3xorg/circuit-mysql) and [circuit-valkey](https://github.com/conn3xorg/circuit-valkey) put them on the same host, and [circuit-osquery](https://github.com/conn3xorg/circuit-osquery) enrolls your hosts afterwards. Passwords and keys go in at run time and never land in state.
