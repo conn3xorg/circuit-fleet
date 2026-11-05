@@ -32,7 +32,7 @@ locals {
 }
 
 module "mysql" {
-  source = "github.com/conn3xorg/circuit-mysql?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-mysql?ref=v0.3.0"
 
   hosts                = local.host
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -46,7 +46,7 @@ module "mysql" {
 }
 
 module "valkey" {
-  source = "github.com/conn3xorg/circuit-valkey?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-valkey?ref=v0.2.0"
 
   hosts                = local.host
   ssh_private_key_file = "~/.ssh/id_ed25519"
@@ -55,7 +55,7 @@ module "valkey" {
 }
 
 module "fleet" {
-  source = "github.com/conn3xorg/circuit-fleet?ref=v0.1.1"
+  source = "github.com/conn3xorg/circuit-fleet?ref=v0.2.0"
 
   depends_on = [module.mysql, module.valkey]
 
@@ -117,7 +117,7 @@ Use [circuit-osquery](https://github.com/conn3xorg/circuit-osquery) on every hos
 
 ```hcl
 module "osquery" {
-  source = "github.com/conn3xorg/circuit-osquery?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-osquery?ref=v0.2.0"
 
   hosts                = { web1 = "192.168.1.60" }
   ssh_private_key_file = "~/.ssh/id_ed25519"
