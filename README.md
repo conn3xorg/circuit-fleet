@@ -55,7 +55,7 @@ module "valkey" {
 }
 
 module "fleet" {
-  source = "github.com/conn3xorg/circuit-fleet?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-fleet?ref=v0.1.1"
 
   depends_on = [module.mysql, module.valkey]
 
