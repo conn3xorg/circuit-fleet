@@ -121,6 +121,29 @@ jobs:
           done
           ./check.sh
           conn3x plan -detailed-exitcode
+      # A fresh host gets the previous release, then the circuit's own pin is
+      # applied over it, the way someone raises fleet_version. Fleet's
+      # migrations run on the upgrade, and the admin made before it still
+      # signs in, enrolls the host and runs a live query.
+      - name: Upgrade from Fleet 4.93.2 on a fresh host, then plan again with no changes
+        working-directory: examples/local
+        env:
+          CONTAINERFILE: ${{ github.workspace }}/conn3x/test/images/${{ matrix.distro }}/Containerfile
+          TF_VAR_os: ${{ matrix.os }}
+        run: |
+          ./down.sh
+          ./up.sh
+          conn3x init
+          conn3x apply -auto-approve -var fleet_version=4.93.2 -var fleet_sha256=6d4a07a43cd1a2160229b0b35e3769ac2031062da5321c65c13813605f3a9127
+          sudo podman exec circuit-fleet /opt/fleet/fleet_v4.93.2_linux/fleet version | grep -qx 'fleet version 4.93.2'
+          ./setup.sh
+          conn3x apply -auto-approve
+          conn3x plan -detailed-exitcode
+          TF_VAR_enroll=true conn3x apply -auto-approve
+          TF_VAR_enroll=true conn3x plan -detailed-exitcode
+      - name: Check the upgraded Fleet lists the host and it answers a live query
+        working-directory: examples/local
+        run: ./check.sh
       - name: Show the logs
         if: failure()
         run: sudo podman exec circuit-fleet journalctl --no-pager -n 80 -u fleet -u osqueryd || true

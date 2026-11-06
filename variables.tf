@@ -41,6 +41,7 @@ variable "ssh_become" {
 variable "fleet_version" {
   type        = string
   default     = "4.94.0"
+  nullable    = false
   description = "Fleet release to install, such as \"4.94.0\". Raising it stops Fleet, runs its database migrations and starts the new release. Change fleet_sha256 with it."
 
   validation {
@@ -52,6 +53,7 @@ variable "fleet_version" {
 variable "fleet_sha256" {
   type        = string
   default     = "c5a5e43b0ae7f9bafd60e9fed304d52a40e541db259cb02adae1d329ea21fd0e"
+  nullable    = false
   description = "SHA-256 of fleet_v<version>_linux.tar.gz, from the release's checksums.txt."
 
   validation {
