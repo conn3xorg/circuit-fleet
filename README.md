@@ -218,7 +218,7 @@ Requires Conn3x v0.6.9 or later and systemd on each host, amd64 only, since Flee
 
 ## Tested on
 
-Ubuntu 24.04, Debian 13 and Rocky Linux 10, with Fleet 4.94.0, MySQL 8.4 from circuit-mysql, Valkey from circuit-valkey and osquery 5.24.0 from circuit-osquery, all on one host. CI applies [examples/local](examples/local) to each on amd64 and checks that the plan after it has no changes. It then completes Fleet's setup through its API, sets the enroll secret, enrolls the host with osquery, plans again, and checks these: the tier is free, setup is closed, a wrong enroll secret gets a 401, the host is listed and online, and it answers a live query. It also checks that no secret reached the state file. The same ran by hand in containers on an amd64 machine.
+Ubuntu 24.04, Debian 13 and Rocky Linux 10, with Fleet 4.94.0, MySQL 8.4 from circuit-mysql, Valkey from circuit-valkey and osquery 5.24.0 from circuit-osquery, all on one host. CI applies [examples/local](examples/local) to each on amd64 and checks that the plan after it has no changes. It then completes Fleet's setup through its API, sets the enroll secret, enrolls the host with osquery, plans again, and checks these: the tier is free, setup is closed, a wrong enroll secret gets a 401, the host is listed and online, and it answers a live query. It also checks that no secret reached the state file. Then it restarts the container and runs the same checks again, with the plan still empty. The same ran by hand in containers on an amd64 machine.
 
 The same checks passed on Ubuntu 24.04 and Rocky Linux 10 droplets, the Rocky one with SELinux enforcing and no denials logged, and again after rebooting each, when the plan also had no changes.
 
