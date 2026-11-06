@@ -47,6 +47,18 @@ variable "enroll_secret" {
   sensitive = true
 }
 
+# CI sets these to install an older Fleet first, then upgrades to the
+# circuit's own pin by applying again without them.
+variable "fleet_version" {
+  type    = string
+  default = null
+}
+
+variable "fleet_sha256" {
+  type    = string
+  default = null
+}
+
 locals {
   host = { box = { address = "127.0.0.1", os = var.os } }
 }
@@ -92,6 +104,8 @@ module "fleet" {
   database_password  = var.db_password
   redis_password     = var.valkey_password
   server_private_key = var.server_private_key
+  fleet_version      = var.fleet_version
+  fleet_sha256       = var.fleet_sha256
 }
 
 # The same host enrolls in its own Fleet, trusting the self-signed certificate.
