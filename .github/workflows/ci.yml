@@ -101,6 +101,26 @@ jobs:
       - name: Check no secret reached the state
         working-directory: examples/local
         run: "! grep -E 'correct-horse|staple-paper|example-only|example-enroll' terraform.tfstate"
+      # Restarting the container boots systemd again, so this checks Fleet,
+      # its database and osquery are enabled, the host comes back online and
+      # answers a live query, and the plan has nothing to do.
+      - name: Restart the host, then check Fleet and the plan again
+        working-directory: examples/local
+        env:
+          TF_VAR_os: ${{ matrix.os }}
+          TF_VAR_enroll: "true"
+        run: |
+          sudo podman restart circuit-fleet
+          for _ in $(seq 60); do
+            case $(sudo podman exec circuit-fleet systemctl is-system-running 2>/dev/null) in running|degraded) break ;; esac
+            sleep 1
+          done
+          for _ in $(seq 60); do
+            sudo podman exec circuit-fleet curl -sf --cacert /etc/fleet/fleet.crt -o /dev/null https://localhost:8080/healthz && break
+            sleep 2
+          done
+          ./check.sh
+          conn3x plan -detailed-exitcode
       - name: Show the logs
         if: failure()
         run: sudo podman exec circuit-fleet journalctl --no-pager -n 80 -u fleet -u osqueryd || true
