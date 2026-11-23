@@ -66,7 +66,7 @@ locals {
 # Fleet is tested against MySQL 8.4, and doesn't list 9.7, circuit-mysql's
 # default.
 module "mysql" {
-  source = "github.com/conn3xorg/circuit-mysql?ref=v0.1.0"
+  source = "github.com/conn3xorg/circuit-mysql?ref=v0.5.1"
 
   hosts                = local.host
   ssh_port             = var.port
