@@ -209,7 +209,7 @@ Fleet sends anonymous [usage statistics](https://fleetdm.com/docs/using-fleet/us
 
 ## Requirements
 
-Requires Conn3x v0.6.9 or later and systemd on each host, amd64 only, since Fleet's release has one Linux build. Each host needs to reach GitHub for the download, and needs a MySQL server and a Redis or Valkey server it can log in to. Fleet asks for MySQL 8.0.44 or later and lists 8.0.44, 8.4.8 and 9.5.0 as tested, with 9.6.0 incompatible; this circuit doesn't check which one you have. On a droplet with 4 GB of memory, Fleet used about 115 MB just after a reboot, and the whole host, with MySQL and Valkey, about 900 MB. Those figures are from a host with one or two enrolled machines and no vulnerability scan run yet, so they're a floor.
+Requires Conn3x v0.28.0 or later and systemd on each host, amd64 only, since Fleet's release has one Linux build. Each host needs to reach GitHub for the download, and needs a MySQL server and a Redis or Valkey server it can log in to. Fleet asks for MySQL 8.0.44 or later and lists 8.0.44, 8.4.8 and 9.5.0 as tested, with 9.6.0 incompatible; this circuit doesn't check which one you have. On a droplet with 4 GB of memory, Fleet used about 115 MB just after a reboot, and the whole host, with MySQL and Valkey, about 900 MB. Those figures are from a host with one or two enrolled machines and no vulnerability scan run yet, so they're a floor.
 
 ### Distributions left out
 
