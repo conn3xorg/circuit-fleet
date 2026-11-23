@@ -277,8 +277,8 @@ circuit "fleet" {
   # It runs here rather than in a handler so the wait below finds the server
   # running with the new settings.
   step "restart" {
-    command {
-      command = "systemctl daemon-reload && systemctl restart fleet"
+    service_action {
+      name = "fleet"
       triggers = {
         prepare     = conn3x_command.fleet__prepare[each.key].revision
         unit        = conn3x_file.fleet__unit[each.key].revision
