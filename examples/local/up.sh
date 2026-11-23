@@ -19,6 +19,11 @@ $podman rm -f -v "$name" >/dev/null 2>&1 || true
 $podman run -d --name "$name" --systemd=always --privileged \
   -p "127.0.0.1:$port:22" "$name" >/dev/null
 $podman exec -i "$name" sh -c 'cat > /root/.ssh/authorized_keys && chmod 600 /root/.ssh/authorized_keys' < id_ed25519.pub
+# MySQL's 8.4 packages recommend user(mysql), which Rocky Linux 10.3's own
+# mysql8.4-server provides, so dnf installs both and their files clash.
+# shortcut: only this test host is covered, until circuit-mysql installs
+# without weak dependencies and the example pins that release.
+$podman exec "$name" sh -c '[ ! -f /etc/dnf/dnf.conf ] || grep -q "^excludepkgs=mysql8.4" /etc/dnf/dnf.conf || echo "excludepkgs=mysql8.4*" >> /etc/dnf/dnf.conf'
 $podman exec "$name" timeout 60 systemctl is-system-running --wait >/dev/null 2>&1 || true
 
 for _ in 1 2 3 4 5 6 7 8 9 10; do
