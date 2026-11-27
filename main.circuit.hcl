@@ -261,14 +261,24 @@ circuit "fleet" {
     }
   }
 
-  # Fleet's upgrade guide runs migrations with every server stopped. On the
-  # first apply this creates the schema. A new release gets here through
-  # its own trigger.
+  # Fleet's upgrade guide runs migrations with every server stopped. On a
+  # first apply Fleet hasn't started yet, so the stop has nothing to do.
+  step "stop" {
+    service_action {
+      name     = "fleet"
+      action   = "stop"
+      triggers = { version = var.fleet_version }
+    }
+  }
+
+  # On the first apply this creates the schema. A new release gets here
+  # through its own trigger, after the stop above.
   step "prepare" {
     command {
-      command = "systemctl stop fleet 2>/dev/null || true; ${local.binary} prepare db --no-prompt --config ${local.config}"
+      command = "${local.binary} prepare db --no-prompt --config ${local.config}"
       triggers = {
         version = var.fleet_version
+        stopped = conn3x_service_action.fleet__stop[each.key].revision
       }
     }
     depends_on = [conn3x_archive.fleet__unpack, conn3x_file.fleet__config, conn3x_file.fleet__database_password]
